@@ -5,20 +5,21 @@ export const login = (email, password) => {
   }
   return async (dispatch) => {
     try {
-      await fetch('https://localhost:7039/api/users/login', {
+      const response = await fetch('https://localhost:7039/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload),
       })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log('afeffff', res.token)
-          localStorage.setItem('token', res.token.replace(/['"]+/g, ''))
-        })
+      const data = await response.json()
+      if (response.ok) {
+        localStorage.setItem('token', data.token.replace(/['"]+/g, ''))
+      } else {
+        throw new Error(data.message || 'Login failed')
+      }
     } catch (error) {
-      // Error
+      throw error
     }
   }
 }
@@ -42,30 +43,6 @@ export const register = (email, username, password, role) => {
         }
       )
       console.log('rssss', payload)
-    } catch (error) {
-      // Error
-    }
-  }
-}
-export const projet = (name, prescription, startDate, endDate) => {
-  const payload = {
-    name: name,
-    prescription: prescription,
-    startDate: startDate,
-    endDate: endDate,
-  }
-  var token = localStorage.getItem('token')
-  console.log('token', token)
-  return async (dispatch) => {
-    try {
-      const response = await fetch('https://localhost:7039/api/projets/new', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + token,
-        },
-        body: JSON.stringify(payload),
-      })
     } catch (error) {
       // Error
     }

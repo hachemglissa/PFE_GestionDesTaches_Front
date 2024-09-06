@@ -1,35 +1,39 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './styles/login.css'
-import { useDispatch, useSelector } from 'react-redux'
+import './styles/projet.css'
+import { useDispatch } from 'react-redux'
 import { projetAll } from './store/actions/authActions'
 
 const ProjetAll = () => {
   const dispatch = useDispatch()
-  dispatch(projetAll())
+
+  useEffect(() => {
+    dispatch(projetAll())
+  }, [dispatch])
+
   const list = localStorage.getItem('list')
-  const lists = JSON.parse(list)
+  const projects = JSON.parse(list)
 
   const navigate = useNavigate()
 
-  const onButtonClick = () => {}
+  const onProjectClick = (projectId) => {
+    navigate(`/project/${projectId}`)
+  }
 
   return (
-    <div className={'mainContainer'}>
-      <div className={'titleContainer'}>
-        <div>Tous les projets</div>
+    <div className="mainContainer">
+      <div className="titleContainer">
+        <h1>Tous les projets</h1>
       </div>
-      <br />
-      <div className={'inputContainer'}>
-        {lists.map((projet) => (
-          <button
-            key={projet.id}
-            className="inputButtonProjet"
-            type="button"
-            onClick={onButtonClick}
+      <div className="projectsContainer">
+        {projects.map((project) => (
+          <div
+            key={project.id}
+            className="projectCard"
+            onClick={() => onProjectClick(project.id)}
           >
-            <div className="textp">{projet.name}</div>
-          </button>
+            <div className="projectName">{project.name}</div>
+          </div>
         ))}
       </div>
     </div>

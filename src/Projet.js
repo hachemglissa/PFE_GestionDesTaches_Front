@@ -1,21 +1,29 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import './styles/login.css'
-import { projet } from './store/actions/authActions'
+import './styles/projet.css'
+import { createProjet } from './store/actions/projetActions'
 import { useDispatch } from 'react-redux'
 
 const Projet = (props) => {
   const [name, setName] = useState('')
-  const [prescription, setPrescription] = useState('')
+  const [description, setDescription] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+  const [status, setStatus] = useState('')
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
-  const onButtonClick = () => {
-    dispatch(projet(name, prescription, startDate, endDate))
-    navigate('/projet')
+  const onButtonClick = async () => {
+    try {
+      await dispatch(
+        createProjet(name, description, startDate, endDate, status)
+      )
+      navigate('/projet')
+    } catch (error) {
+      console.error('Project creation failed:', error)
+      // Handle error (e.g., show an error message to the user)
+    }
   }
 
   return (
@@ -35,9 +43,9 @@ const Projet = (props) => {
       <br />
       <div className={'inputContainer'}>
         <textarea
-          value={prescription}
-          placeholder="Enter your prescription"
-          onChange={(ev) => setPrescription(ev.target.value)}
+          value={description}
+          placeholder="Enter your description"
+          onChange={(ev) => setDescription(ev.target.value)}
           className={'inputBox'}
         />
       </div>
@@ -68,6 +76,17 @@ const Projet = (props) => {
         {endDate && (
           <p>Selected Date: {new Date(endDate).toLocaleDateString()}</p>
         )}
+      </div>
+      <br />
+      <div className={'inputContainer'}>
+        <label htmlFor="status">Status:</label>
+        <input
+          type="text"
+          id="status"
+          value={status}
+          onChange={(event) => setStatus(event.target.value)}
+          className="inputBox"
+        />
       </div>
       <br />
       <div className={'inputContainer'}>

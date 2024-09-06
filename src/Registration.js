@@ -8,16 +8,35 @@ const Registration = (props) => {
   const [email, setEmail] = useState('')
   const [username, setUserName] = useState('')
   const [role, setRole] = useState('')
-
   const [password, setPassword] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
-  const dispatch = useDispatch()
 
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const onButtonClick = () => {
-    dispatch(register(email, username, password, role))
+    let valid = true
+
+    if (!email.includes('@')) {
+      setEmailError('Invalid email format')
+      valid = false
+    } else {
+      setEmailError('')
+    }
+
+    if (password.length < 6) {
+      setPasswordError('Password should be at least 6 characters')
+      valid = false
+    } else {
+      setPasswordError('')
+    }
+
+    if (valid) {
+      dispatch(register(email, username, password, role))
+      navigate('/login') // Redirect to login page
+      // Or navigate('/home'); // Redirect to home page
+    }
   }
 
   return (
@@ -33,6 +52,7 @@ const Registration = (props) => {
           onChange={(ev) => setEmail(ev.target.value)}
           className={'inputBox'}
         />
+        <label className="errorLabel">{emailError}</label>
       </div>
       <br />
       <div className={'inputContainer'}>
@@ -60,10 +80,9 @@ const Registration = (props) => {
           onChange={(ev) => setRole(ev.target.value)}
           className={'inputBox'}
         >
-          <option>Selectionner un role</option>
+          <option>Select a role</option>
           <option value="Admin">Admin</option>
           <option value="user">User</option>
-          <option value="dev">Dev</option>
         </select>
       </div>
       <br />

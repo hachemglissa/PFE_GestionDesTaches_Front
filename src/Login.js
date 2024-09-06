@@ -13,9 +13,33 @@ const Login = (props) => {
 
   const navigate = useNavigate()
 
-  const onButtonClick = () => {
-    dispatch(login(email, password))
-    navigate('/projet')
+  const validate = () => {
+    let isValid = true
+    if (!email) {
+      setEmailError('Email is required')
+      isValid = false
+    } else {
+      setEmailError('')
+    }
+    if (!password) {
+      setPasswordError('Password is required')
+      isValid = false
+    } else {
+      setPasswordError('')
+    }
+    return isValid
+  }
+
+  const onButtonClick = async () => {
+    if (validate()) {
+      try {
+        await dispatch(login(email, password))
+        navigate('/projet')
+      } catch (error) {
+        setEmailError('Invalid email or password')
+        setPasswordError('Invalid email or password')
+      }
+    }
   }
 
   return (
@@ -40,6 +64,7 @@ const Login = (props) => {
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
           className={'inputBox'}
+          type="password"
         />
         <label className="errorLabel">{passwordError}</label>
       </div>
