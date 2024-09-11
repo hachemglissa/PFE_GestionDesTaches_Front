@@ -1,9 +1,10 @@
 import React from 'react'
 
-function Header() {
+function Header({ projectName }) {
+  console.log('Header Project Name:', projectName) // Check what is being received
   return (
     <div className="header_container">
-      <h2> Gestion des ressources</h2>
+      <h2>{projectName}</h2> {/* Display the project name */}
       <img
         src="/assets/images/avatar.png"
         alt="avatar"

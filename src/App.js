@@ -19,11 +19,12 @@ function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Registration />} />
         <Route path="/projet/add" element={<Projet />} />
         <Route path="/projet" element={<ProjetAll />} />
-        <Route path="/" element={<Accueil />} />
+        <Route path="/:projectId" element={<Accueil />} />
       </Routes>
     </Router>
   )

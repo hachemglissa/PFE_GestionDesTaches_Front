@@ -9,12 +9,18 @@ const Projet = (props) => {
   const [description, setDescription] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [status, setStatus] = useState('')
+  const [status, setStatus] = useState('open') // Définir la valeur par défaut à "open"
+  const [error, setError] = useState('')
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
   const onButtonClick = async () => {
+    if (!name || !description || !startDate || !endDate || !status) {
+      setError('All fields are required')
+      return
+    }
+
     try {
       await dispatch(
         createProjet(name, description, startDate, endDate, status)
@@ -22,20 +28,38 @@ const Projet = (props) => {
       navigate('/projet')
     } catch (error) {
       console.error('Project creation failed:', error)
-      // Handle error (e.g., show an error message to the user)
+      setError('Project creation failed. Please try again.')
     }
+  }
+
+  const handleAllProjects = () => {
+    navigate('/projet')
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    navigate('/login')
   }
 
   return (
     <div className={'mainContainer'}>
+      <div className={'buttonsContainer'}>
+        <button className="logoutButton" onClick={handleLogout}>
+          Logout
+        </button>
+        <button className={'allProjectsButton'} onClick={handleAllProjects}>
+          All Projects
+        </button>
+      </div>
       <div className={'titleContainer'}>
         <div>Créer un nouveau projet</div>
       </div>
       <br />
+      {error && <div className="errorMessage">{error}</div>}
       <div className={'inputContainer'}>
         <input
           value={name}
-          placeholder="Enter your name"
+          placeholder="Enter your project name"
           onChange={(ev) => setName(ev.target.value)}
           className={'inputBox'}
         />
@@ -80,13 +104,15 @@ const Projet = (props) => {
       <br />
       <div className={'inputContainer'}>
         <label htmlFor="status">Status:</label>
-        <input
-          type="text"
+        <select
           id="status"
           value={status}
           onChange={(event) => setStatus(event.target.value)}
           className="inputBox"
-        />
+        >
+          <option value="open">Open</option>
+          <option value="closed">Closed</option>
+        </select>
       </div>
       <br />
       <div className={'inputContainer'}>

@@ -10,6 +10,7 @@
     #d9e2ec,
     #007bff
   ); /* Added a gradient background */
+  position: relative; /* Added to position the buttons */
 }
 
 .titleContainer {
@@ -41,18 +42,61 @@
 }
 
 .projectCard {
-  width: 300px;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 5px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: background-color 0.3s;
 }
 
 .projectCard:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  background-color: #e9ecef;
+}
+
+/* styles/projet.css */
+
+/* Add styles for the logout and create project buttons */
+.logoutButton,
+.createProjectButton {
+  background-color: #007bff; /* Adjust colors as needed */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logoutButton:hover,
+.createProjectButton:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.createProjectButton {
+  background-color: #28a745; /* Green for create project button */
+}
+
+.createProjectButton:hover {
+  background-color: #218838; /* Darker shade on hover */
+}
+
+/* Container for the buttons */
+.buttonsContainer {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+}
+.projectsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
 }
 
 .projectName {
@@ -60,8 +104,37 @@
   font-weight: bold;
   color: #007bff;
   text-align: center;
+  font-size: 18px; /* Adjust size if needed */
 }
 
 .projectName:hover {
   color: #0056b3;
+}
+
+/* styles/projet.css */
+
+/* Add styles for the logout and all projects buttons */
+.logoutButton,
+.allProjectsButton {
+  background-color: #007bff; /* Adjust colors as needed */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logoutButton:hover,
+.allProjectsButton:hover {
+  background-color: #0056b3; /* Darker shade on hover */
+}
+
+.allProjectsButton {
+  background-color: #28a745; /* Green for all projects button */
+}
+
+.allProjectsButton:hover {
+  background-color: #218838; /* Darker shade on hover */
 }
