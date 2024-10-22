@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { v4 as uuidv4 } from 'uuid'
 
 // components
-import TodoFrom from './TodoForm'
+import TodoForm from './TodoForm' // Corrected the component name from TodoFrom to TodoForm
 import ButtonIcon from 'components/ButtonIcon'
 
 // actions
@@ -12,7 +12,14 @@ import { addList, addCard } from '../../redux/todo.reducer'
 const TodoCreate = ({ isLists, listId, className }) => {
   const dispatch = useDispatch()
   const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('') // New state for description
+  const [priority, setPriority] = useState('') // New state for priority
+  const [startDate, setStartDate] = useState('') // New state for start date
+  const [dueDate, setDueDate] = useState('') // New state for due date
+  const [statusId, setStatusId] = useState(null) // New state for statusId
   const [openForm, setOpenForm] = useState(false)
+  const projectId = localStorage.getItem('idProjet')
+
   const label = isLists ? 'Add another list' : 'Add a card'
   const placeholder = isLists
     ? 'Enter list title...'
@@ -20,14 +27,41 @@ const TodoCreate = ({ isLists, listId, className }) => {
 
   const handleCloseForm = () => {
     setOpenForm(false)
+    // Reset states when closing the form
+    setTitle('')
+    setDescription('')
+    setPriority('')
+    setStartDate('')
+    setDueDate('')
+    setStatusId(null)
   }
 
   const handleOpenForm = () => {
     setOpenForm(true)
   }
 
-  const onChange = (e) => {
+  const onChangeTitle = (e) => {
     setTitle(e.target.value)
+  }
+
+  const onChangeDescription = (e) => {
+    setDescription(e.target.value)
+  }
+
+  const onChangePriority = (e) => {
+    setPriority(e.target.value)
+  }
+
+  const onChangeStartDate = (e) => {
+    setStartDate(e.target.value)
+  }
+
+  const onChangeDueDate = (e) => {
+    setDueDate(e.target.value)
+  }
+
+  const onChangeStatusId = (e) => {
+    setStatusId(e.target.value) // Assuming statusId is a simple string or number
   }
 
   const handleAddList = () => {
@@ -47,26 +81,32 @@ const TodoCreate = ({ isLists, listId, className }) => {
 
   const handleAddCard = () => {
     if (title === '') return
+    const statusId = listId.match(/\d+/g)
 
-    const id = `card-${uuidv4()}`
     const newCards = {
-      id,
+      //id: `card-${uuidv4()}`, // Generate a unique ID for the card
       title,
-      list: listId,
-      member: [],
+      description: ' ', // Include description
+      priority: 'low', // Include priority
+      startDate: new Date(), // Include start date
+      dueDate: new Date(), // Include due date
+      statusId: Number(statusId), // List ID
+      projectId: Number(projectId), // Include status ID
     }
+    console.log('newCard==>', newCards)
+
     dispatch(addCard(listId, newCards))
-    setTitle('')
+    handleCloseForm() // Reset fields after adding the card
   }
 
   return (
     <div className={className}>
       {openForm ? (
         <>
-          <TodoFrom
+          <TodoForm
             text={title}
             placeholder={placeholder}
-            onChange={onChange}
+            onChange={onChangeTitle}
             handleCloseForm={handleCloseForm}
           >
             <button
@@ -76,7 +116,7 @@ const TodoCreate = ({ isLists, listId, className }) => {
             >
               Save
             </button>
-          </TodoFrom>
+          </TodoForm>
         </>
       ) : (
         <div className="todoCreate__button" onClick={handleOpenForm}>

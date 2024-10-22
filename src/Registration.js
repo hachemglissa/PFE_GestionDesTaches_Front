@@ -70,6 +70,7 @@ const Registration = (props) => {
           placeholder="Enter your password here"
           onChange={(ev) => setPassword(ev.target.value)}
           className={'inputBox'}
+          type="password"
         />
         <label className="errorLabel">{passwordError}</label>
       </div>
@@ -82,7 +83,8 @@ const Registration = (props) => {
         >
           <option>Select a role</option>
           <option value="Admin">Admin</option>
-          <option value="user">User</option>
+          <option value="user">Developper</option>
+          <option value="user">TeamLeader</option>
         </select>
       </div>
       <br />

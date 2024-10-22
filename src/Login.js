@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import './styles/login.css'
 import { useDispatch } from 'react-redux'
 import { login } from './store/actions/authActions'
+import { projetAll } from './store/actions/projetActions'
 
 const Login = (props) => {
   const [email, setEmail] = useState('')
@@ -32,9 +33,12 @@ const Login = (props) => {
 
   const onButtonClick = async () => {
     if (validate()) {
+      dispatch(projetAll())
       try {
         await dispatch(login(email, password))
-        navigate('/projet')
+        localStorage.setItem('email', email)
+        dispatch(projetAll())
+        navigate('/projets')
       } catch (error) {
         setEmailError('Invalid email or password')
         setPasswordError('Invalid email or password')

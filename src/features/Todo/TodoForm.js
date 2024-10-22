@@ -3,7 +3,7 @@ import React, { memo } from 'react'
 // components
 import ButtonIcon from 'components/ButtonIcon'
 
-function TodoCard({ text, placeholder, onChange, handleCloseForm, children }) {
+function TodoForm({ text, placeholder, onChange, handleCloseForm, children }) {
   return (
     <div className="todoForm">
       <textarea
@@ -20,4 +20,4 @@ function TodoCard({ text, placeholder, onChange, handleCloseForm, children }) {
   )
 }
 
-export default memo(TodoCard)
+export default memo(TodoForm)

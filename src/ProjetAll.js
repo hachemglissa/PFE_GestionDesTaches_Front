@@ -2,26 +2,28 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './styles/projet.css'
 import { useDispatch } from 'react-redux'
-import { projetAll } from './store/actions/authActions'
-import Header from '../src/components/Header'
+import { getAllUsers } from './store/actions/authActions'
+import { projetAll } from './store/actions/projetActions'
 
 const ProjetAll = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [selectedProjectName, setSelectedProjectName] = useState(
-    'Gestion des ressources'
-  ) // Initial value
+  const [refreshKey, setRefreshKey] = useState(0)
 
+  // Fetch projects on mount or when refreshKey changes
   useEffect(() => {
     dispatch(projetAll())
-  }, [dispatch])
+  }, [dispatch, refreshKey]) // Depend on refreshKey to trigger refresh
 
   const list = localStorage.getItem('list')
   const projects = JSON.parse(list) || []
 
-  const onProjectClick = (projectId, projectName) => {
-    setSelectedProjectName(projectName) // Update the selected project name
-    navigate(`/${projectId}`)
+  const onProjectClick = (projectId) => {
+    console.log('Selected Project ID:', projectId)
+    localStorage.setItem('idProjet', projectId) // Set the project ID in localStorage
+    const selectedProject = projects.find((project) => project.id === projectId)
+    localStorage.setItem('nameProj', selectedProject.name)
+    navigate(`/projet/${projectId}`)
   }
 
   const handleLogout = () => {
@@ -31,6 +33,11 @@ const ProjetAll = () => {
 
   const handleCreateProject = () => {
     navigate('/projet/add')
+    setRefreshKey((prevKey) => prevKey + 1) // Increment key to trigger data refresh
+  }
+  const handleAllUsers = () => {
+    dispatch(getAllUsers()) // Fetch all users
+    navigate('/users/all') // Navigate to the UsersList page
   }
 
   return (
@@ -42,6 +49,9 @@ const ProjetAll = () => {
         <button className="createProjectButton" onClick={handleCreateProject}>
           Créer un projet
         </button>
+        <button className="createProjectButton" onClick={handleAllUsers}>
+          Liste des utilisateurs
+        </button>
       </div>
       <div className="titleContainer">
         <h1>Tous les projets</h1>
@@ -52,7 +62,7 @@ const ProjetAll = () => {
             <div
               key={project.id}
               className="projectCard"
-              onClick={() => onProjectClick(project.id, project.name)} // Pass project ID and name
+              onClick={() => onProjectClick(project.id)}
             >
               <div className="projectName">{project.name}</div>
             </div>

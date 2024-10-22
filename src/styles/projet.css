@@ -1,140 +1,148 @@
+/* Main container styling */
 .mainContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  justify-content: center;
   min-height: 100vh;
+  padding: 20px;
   background: linear-gradient(
-    135deg,
-    #f0f4f8,
-    #d9e2ec,
-    #007bff
-  ); /* Added a gradient background */
-  position: relative; /* Added to position the buttons */
+    90deg,
+    #0f2027,
+    #203a43,
+    #2c5364
+  ); /* Dark gradient for a sleek look */
+  position: relative;
 }
 
+/* Title styling */
 .titleContainer {
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   text-align: center;
 }
 
 .titleContainer h1 {
-  font-size: 2em; /* Medium size for the title */
+  font-size: 2.5em; /* Bigger and bolder */
   color: #007bff;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 2px;
   font-weight: 700;
-  background: linear-gradient(90deg, #007bff, #00c6ff);
+  background: linear-gradient(90deg, #4191e75a, #b1d7e1);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   margin: 0;
-  padding: 15px 0;
-  border-bottom: 2px solid #007bff;
-  border-radius: 10px;
+  padding: 20px 0;
+  border-bottom: 3px solid #5f646a;
+  border-radius: 12px;
   display: inline-block;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.projectsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-}
-
-.projectCard {
-  background-color: #f8f9fa;
-  padding: 15px;
-  margin: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.projectCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-  background-color: #e9ecef;
-}
-
-/* styles/projet.css */
-
-/* Add styles for the logout and create project buttons */
-.logoutButton,
-.createProjectButton {
-  background-color: #007bff; /* Adjust colors as needed */
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  margin: 5px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.logoutButton:hover,
-.createProjectButton:hover {
-  background-color: #0056b3; /* Darker shade on hover */
-}
-
-.createProjectButton {
-  background-color: #28a745; /* Green for create project button */
-}
-
-.createProjectButton:hover {
-  background-color: #218838; /* Darker shade on hover */
-}
-
-/* Container for the buttons */
+/* Buttons container styling */
 .buttonsContainer {
   position: absolute;
   top: 20px;
   right: 20px;
   display: flex;
-  gap: 10px;
+  gap: 15px; /* Increase the gap between buttons */
 }
+
+.logoutButton,
+.createProjectButton {
+  background-color: #17a2b8; /* Couleur principale du bouton */
+  color: white;
+  border: none;
+  padding: 12px 24px; /* Bigger padding for a more clickable feel */
+  margin: 5px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 3px 6px rgba(0, 123, 255, 0.4); /* Button shadow */
+  transition: all 0.3s ease-in-out;
+}
+
+.logoutButton:hover,
+.createProjectButton:hover {
+  background-color: #138496; /* Couleur au survol */
+  box-shadow: 0 8px 20px rgba(23, 162, 184, 0.6); /* Ombre plus forte au survol */
+  transform: translateY(-3px); /* Elevation effect on hover */
+}
+
+.createProjectButton {
+  background-color: #138496; /* Green for create project button */
+}
+
+.createProjectButton:hover {
+  background-color: #138496; /* Darker green on hover */
+}
+
+/* Projects container styling */
 .projectsContainer {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px;
+  gap: 30px; /* Increase gap between project cards */
+  margin-top: 20px;
+  width: 100%;
+  max-width: 1200px;
 }
 
+/* Project card styling */
+.projectCard {
+  background-color: #f8f9fa;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  max-width: 300px;
+  flex: 1 1 250px;
+}
+
+.projectCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+  background-color: #e9ecef;
+}
+
+/* Project name styling */
 .projectName {
-  font-size: 1.5em;
+  font-size: 1.8em; /* Larger font */
   font-weight: bold;
-  color: #007bff;
+  color: #138496;
   text-align: center;
-  font-size: 18px; /* Adjust size if needed */
+  margin: 0;
 }
 
 .projectName:hover {
   color: #0056b3;
 }
 
-/* styles/projet.css */
-
-/* Add styles for the logout and all projects buttons */
-.logoutButton,
+/* No projects available message styling */
+.projectsContainer p {
+  font-size: 1.2em;
+  color: #1d4160;
+  text-align: center;
+  margin-top: 40px;
+}
 .allProjectsButton {
-  background-color: #007bff; /* Adjust colors as needed */
+  background-color: #17a2b8; /* Couleur principale du bouton */
   color: white;
   border: none;
-  padding: 10px 20px;
-  margin: 5px;
-  border-radius: 5px;
-  cursor: pointer;
+  padding: 12px 28px; /* Taille du bouton */
+  border-radius: 8px;
   font-size: 16px;
-}
-
-.logoutButton:hover,
-.allProjectsButton:hover {
-  background-color: #0056b3; /* Darker shade on hover */
-}
-
-.allProjectsButton {
-  background-color: #28a745; /* Green for all projects button */
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 3px 6px rgba(0, 123, 255, 0.4); /* Button shadow */
+  margin: 10px;
 }
 
 .allProjectsButton:hover {
-  background-color: #218838; /* Darker shade on hover */
+  background-color: #138496; /* Couleur au survol */
+  box-shadow: 0 8px 20px rgba(23, 162, 184, 0.6); /* Ombre plus forte au survol */
+  transform: translateY(-3px); /* Légère élévation au survol */
 }

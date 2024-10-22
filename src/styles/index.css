@@ -1,48 +1,50 @@
-/* index.css */
-
-/* Réinitialisation des marges et des espacements */
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-/* Styles globaux */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Noto Sans,
     Ubuntu, Droid Sans, Helvetica Neue, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #b6c2cf; /* Couleur du texte */
+  color: #b6c2cf;
   font-size: 14px;
-  background-color: #007bff; /* Fond sombre pour correspondre aux autres pages */
 }
 
-/* Apparence du code */
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
-/* Scrollbar */
+main {
+  background: linear-gradient(
+    90deg,
+    #0f2027,
+    #203a43,
+    #2c5364
+  ); /* Dark gradient for a sleek look */
+}
+
 ::-webkit-scrollbar-track {
-  background-color: #2e2e2e;
+  background-color: #f5f5f5;
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
-  background-color: #2e2e2e;
+  width: 7px;
+  background-color: #f5f5f5;
 }
 
 ::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background: #444;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background: #00000026;
 }
 
-/* En-tête */
 header {
   max-height: 48px;
+  overflow: hidden;
   background-color: #161a1d;
   padding: 8px;
 }
@@ -58,14 +60,41 @@ header {
   padding: 8px 0;
 }
 
-.header_avatar {
-  height: 24px;
-  width: 24px;
-  border-radius: 100%;
+.header_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user_info {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Spacing between the icon and email */
+  background-color: #f0f0f0; /* Light background for contrast */
+  padding: 8px 12px; /* Padding for a clean look */
+  border-radius: 8px; /* Rounded corners for a smooth appearance */
+  color: #333; /* Dark text color */
   cursor: pointer;
 }
 
-/* Boutons */
+.connected_icon {
+  color: #4caf50; /* Green for a connected status */
+  margin-right: 5px;
+  font-size: 20px;
+}
+
+.email {
+  font-size: 16px; /* Slightly larger for readability */
+  font-weight: 500; /* Medium weight for clarity */
+  color: #333; /* Dark text color */
+}
+
+.header_avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
 button {
   outline: 0;
   border: 0;
@@ -73,9 +102,8 @@ button {
   cursor: pointer;
 }
 
-/* Styles spécifiques à Todo */
 .todo {
-  height: calc(100vh - 48px); /* Ajusté pour tenir compte de l'en-tête */
+  height: calc(100vh - 47px);
   position: relative;
   overflow-y: hidden;
   padding: 0 10px;
@@ -90,106 +118,227 @@ button {
   padding: 10px 0;
 }
 
-/* Liste Todo */
+/* start todo list */
+
 .todoList {
-  background-color: #2e2e2e;
+  background-color: #101204;
   border-radius: 12px;
   min-width: 300px;
   max-width: 300px;
   max-height: calc(100% - 30px);
-  padding: 10px;
+  padding: 5px;
   margin: 0 8px 0 0;
   display: flex;
   flex-direction: column;
+  word-break: break-all;
 }
 
 .todoList__content {
   flex: 1 1 auto;
   padding: 0 5px;
+  min-height: 10px;
+  overflow-x: hidden;
   overflow-y: auto;
+  margin-bottom: 0;
 }
 
 .todoList__head {
+  width: 100%;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 12px;
-  cursor: pointer;
-  background-color: #1e1e1e;
-  border-radius: 8px;
 }
 
 .todoList__head__title {
+  width: 100%;
+  width: 100%;
+  padding: 6px 8px 6px 12px;
+  word-break: break-all;
   font-size: 14px;
   font-weight: 600;
-  color: #b6c2cf;
+  line-height: 20px;
+  height: 28px;
 }
 
 .todoList__input {
   border-radius: 3px;
-  border: 1px solid #444;
+  border: 0;
+  height: 16px;
+  padding: 6px 8px 6px 12px;
   background-color: transparent;
-  color: #b6c2cf;
-  padding: 6px 8px;
+  color: #fff;
 }
+/* end todo list */
 
-/* Carte Todo */
+/* start todo cart */
+
 .todoCard {
-  background-color: #333;
-  border-radius: 8px;
-  padding: 8px 12px;
-  margin-bottom: 10px;
+  display: flow-root;
   position: relative;
-}
-
-.todoCard__button {
-  display: none;
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  flex-direction: column;
+  padding: 8px 12px 4px;
+  min-height: 24px;
+  z-index: 10;
+  background-color: #22272b;
+  border-radius: 8px;
 }
 
 .todoCard:hover .todoCard__button {
   display: flex;
 }
 
-.todoCard__title {
-  color: #b6c2cf;
+.todoCard__container {
+  margin-bottom: 10px;
 }
 
-/* Formulaire Todo */
+.todoCard__button {
+  right: 5px;
+  top: 5px;
+  display: none;
+  position: absolute;
+  flex-direction: column;
+}
+
+.todoCard__button button {
+  padding: 5px;
+}
+
+.todoCard__title {
+  width: 92%;
+  min-height: 50px;
+  line-height: 18px;
+}
+
+.todoCard__member {
+  width: 100%;
+  text-align: right;
+}
+
+.todoCard__member img {
+  width: 28px;
+  height: 28px;
+}
+
+/* end todo cart */
+
+/* todoCreate */
+.todoCreate__button {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 260px;
+  border-radius: 12px;
+  padding: 6px;
+  color: #ffffff;
+  font-weight: bold;
+}
+
+.todoCreate__button button {
+  position: relative;
+  top: 2px;
+}
+
 .todo_textarea {
-  background-color: #333;
+  width: 277px;
+  background-color: #22272b;
+  box-shadow: 0px 1px 1px #091e4240, 0px 0px 1px #091e424f;
   border-radius: 8px;
+  border: none;
+  height: 54px;
+  height: auto;
+  margin: 0;
+  max-height: 162px;
+  min-height: 54px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  overflow-y: hidden;
+  resize: none;
   padding: 6px;
   color: #b6c2cf;
-  border: 1px solid #444;
-  resize: none;
-  overflow-y: hidden;
+  outline: none;
+  margin-bottom: 8px;
 }
 
 .todoForm {
   width: 100%;
 }
 
-/* Boutons primaires */
+.button_list {
+  padding: 0 6px;
+}
+
 .button_primary {
-  background-color: #0c66e4;
+  background-color: #138496;
+  box-shadow: none;
+  border: none;
   color: #ffffff;
+  line-height: 20px;
+  font-weight: 400;
+  font-display: swap;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 3px;
-  padding: 6px 12px;
   cursor: pointer;
+  padding: 6px 12px;
+  text-decoration: none;
+  white-space: normal;
+  box-shadow: none;
+  border: none;
+  font-weight: 500;
 }
 
-.button_primary:hover {
-  background-color: #085bb5;
-}
-
-/* Création de Todo */
 .todo_add_list {
-  background-color: #2e2e2e;
-  border-radius: 12px;
   padding: 6px;
-  color: #b6c2cf;
+  background-color: #101204;
+  border-radius: 12px;
+}
+
+.edit_icon {
+  color: #3498db;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.edit_icon:hover {
+  color: #2980b9;
+}
+
+.project_name {
+  font-family: 'Georgia', serif;
+  font-size: 28px;
+  color: #ffffff; /* White text for contrast */
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between the name and edit icon */
+  background-color: #000000; /* Black background */
+  padding: 8px 12px; /* Padding for better readability */
+  border-radius: 8px; /* Rounded corners for a smooth look */
+}
+
+.edit_icon {
+  color: #138496;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.edit_icon:hover {
+  color: #138496;
+}
+.back_button {
+  background-color: #138496;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 20px; /* Adjust spacing from other elements */
+  font-size: 14px;
+}
+
+.back_button:hover {
+  background-color: #085b68; /* Darker shade on hover */
 }

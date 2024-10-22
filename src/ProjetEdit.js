@@ -1,20 +1,68 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './styles/projet.css'
-import { createProjet } from './store/actions/projetActions'
+import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { projetAll } from './store/actions/projetActions'
+import {
+  projetById,
+  projetEdit,
+  projetAll,
+} from './store/actions/projetActions'
+import './styles/projet.css'
 
-const Projet = (props) => {
+const ProjetEdit = () => {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
-  const [status, setStatus] = useState('open') // Définir la valeur par défaut à "open"
+  const [status, setStatus] = useState('open')
   const [error, setError] = useState('')
-  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(true)
 
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { projectId } = useParams()
+
+  useEffect(() => {
+    if (projectId) {
+      // First, dispatch to load project by ID
+      dispatch(projetById(projectId))
+        .then(() => {
+          // Retrieve the project data from localStorage
+          const storedList = localStorage.getItem('list')
+          if (storedList) {
+            const projectData = JSON.parse(storedList)
+            // Populate input fields with project data
+            setName(projectData.name || '')
+            setDescription(projectData.description || '')
+            setStartDate(
+              projectData.startDate
+                ? new Date(projectData.startDate).toISOString().substring(0, 10)
+                : ''
+            )
+            setEndDate(
+              projectData.endDate
+                ? new Date(projectData.endDate).toISOString().substring(0, 10)
+                : ''
+            )
+            setStatus(projectData.status || 'open')
+          }
+          setLoading(false)
+        })
+        .catch((error) => {
+          console.error('Failed to fetch project data:', error)
+          setError('Failed to load project data.')
+          setLoading(false)
+        })
+      dispatch(projetAll())
+    }
+  }, [dispatch, projectId])
+  const data = {
+    name: name,
+    description: description,
+    startDate: startDate,
+    endDate: endDate,
+    status: status,
+  }
+  const idProjet = localStorage.getItem('idProjet')
 
   const onButtonClick = async () => {
     if (!name || !description || !startDate || !endDate || !status) {
@@ -23,16 +71,13 @@ const Projet = (props) => {
     }
 
     try {
-      await dispatch(
-        createProjet(name, description, startDate, endDate, status)
-      )
-      dispatch(projetAll())
-      navigate('/projets')
-      dispatch(projetAll())
+      await dispatch(projetEdit(idProjet, data))
+      navigate(`/projet/${projectId}`)
     } catch (error) {
-      console.error('Project creation failed:', error)
-      setError('Project creation failed. Please try again.')
+      console.error('Project update failed:', error)
+      setError('Project update failed. Please try again.')
     }
+    dispatch(projetAll())
   }
 
   const handleAllProjects = () => {
@@ -56,10 +101,14 @@ const Projet = (props) => {
         </button>
       </div>
       <div className={'titleContainer'}>
-        <h1>Créer un nouveau projet</h1>
+        <h1>Edit Project</h1>
       </div>
       <br />
-      {error && <div className="errorMessage">{error}</div>}
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        error && <div className="errorMessage">{error}</div>
+      )}
       <div className={'inputContainer'}>
         <input
           value={name}
@@ -87,9 +136,6 @@ const Projet = (props) => {
           onChange={(event) => setStartDate(event.target.value)}
           className="inputBox"
         />
-        {startDate && (
-          <p>Selected Date: {new Date(startDate).toLocaleDateString()}</p>
-        )}
       </div>
       <br />
       <div className={'inputContainer'}>
@@ -101,9 +147,6 @@ const Projet = (props) => {
           onChange={(event) => setEndDate(event.target.value)}
           className="inputBox"
         />
-        {endDate && (
-          <p>Selected Date: {new Date(endDate).toLocaleDateString()}</p>
-        )}
       </div>
       <br />
       <div className={'inputContainer'}>
@@ -131,4 +174,4 @@ const Projet = (props) => {
   )
 }
 
-export default Projet
+export default ProjetEdit
