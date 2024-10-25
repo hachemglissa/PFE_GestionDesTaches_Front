@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { FaEdit, FaTrash } from 'react-icons/fa' // Icons for edit and delete
+import { FaEdit, FaTrash, FaSave } from 'react-icons/fa' // Icons for edit, delete, save
 import './styles/usersList.css' // Assuming you have a CSS file for custom styling
-import { getAllUsers, deleteUser } from './store/actions/authActions'
+import {
+  getAllUsers,
+  deleteUser,
+  updateUser,
+} from './store/actions/authActions' // Assume you have an updateUser action
 
 const UsersList = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [users, setUsers] = useState([])
+  const [editingUserId, setEditingUserId] = useState(null) // For tracking which user is being edited
+  const [editedUserData, setEditedUserData] = useState({}) // Store edited data
   const [refreshKey, setRefreshKey] = useState(0)
 
   // Get connected user from localStorage (or wherever you store it)
@@ -33,12 +39,33 @@ const UsersList = () => {
     return <p>No users found or data is loading...</p>
   }
 
-  const handleEditUser = (userId) => {
-    console.log('Edit user:', userId)
+  // Handle edit click, set the current user to edit
+  const handleEditUser = (user) => {
+    setEditingUserId(user.id) // Set the current user in edit mode
+    setEditedUserData(user) // Set the current user data to edit
   }
 
+  // Handle field change for edited data
+  const handleFieldChange = (e) => {
+    setEditedUserData({
+      ...editedUserData,
+      [e.target.name]: e.target.value, // Update the field that is being edited
+    })
+  }
+
+  // Save the updated user information
+  const handleSaveUser = async () => {
+    try {
+      await dispatch(updateUser(editedUserData)) // Call update user API
+      setEditingUserId(null) // Exit edit mode
+      setRefreshKey((prevKey) => prevKey + 1) // Optional: trigger refresh
+    } catch (error) {
+      console.error('Failed to update user:', error)
+    }
+  }
+
+  // Handle user deletion
   const handleDeleteUser = async (userId) => {
-    // Show confirmation popup
     const confirmDelete = window.confirm(
       'Voulez-vous vraiment supprimer cet utilisateur?'
     )
@@ -46,9 +73,8 @@ const UsersList = () => {
     if (confirmDelete) {
       try {
         await dispatch(deleteUser(userId))
-        // Remove the deleted user from the local list immediately
         setUsers((prevUsers) => prevUsers.filter((user) => user.id !== userId))
-        setRefreshKey((prevKey) => prevKey + 1) // Optional: trigger refresh if needed
+        setRefreshKey((prevKey) => prevKey + 1) // Optional: trigger refresh
       } catch (error) {
         console.error('Failed to delete user:', error)
       }
@@ -73,14 +99,55 @@ const UsersList = () => {
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
-              <td>{user.userName}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
+              {/* Conditionally render input fields if in edit mode */}
+              <td>
+                {editingUserId === user.id ? (
+                  <input
+                    type="text"
+                    name="userName"
+                    value={editedUserData.userName}
+                    onChange={handleFieldChange}
+                  />
+                ) : (
+                  user.userName
+                )}
+              </td>
+              <td>
+                {editingUserId === user.id ? (
+                  <input
+                    type="text"
+                    name="email"
+                    value={editedUserData.email}
+                    onChange={handleFieldChange}
+                  />
+                ) : (
+                  user.email
+                )}
+              </td>
+              <td>
+                {editingUserId === user.id ? (
+                  <input
+                    type="text"
+                    name="role"
+                    value={editedUserData.role}
+                    onChange={handleFieldChange}
+                  />
+                ) : (
+                  user.role
+                )}
+              </td>
               <td className="actionsColumn">
-                <FaEdit
-                  className="editIcon"
-                  onClick={() => handleEditUser(user.id)}
-                />
+                {editingUserId === user.id ? (
+                  <FaSave
+                    className="saveIcon"
+                    onClick={handleSaveUser} // Save the edited data
+                  />
+                ) : (
+                  <FaEdit
+                    className="editIcon"
+                    onClick={() => handleEditUser(user)} // Start editing
+                  />
+                )}
                 <FaTrash
                   className="deleteIcon"
                   onClick={() => handleDeleteUser(user.id)}

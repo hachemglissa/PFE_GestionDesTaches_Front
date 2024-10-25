@@ -10,7 +10,8 @@ import TodoCreate from './TodoCreate'
 // redux
 import { changeTitleList, removeList } from '../../redux/todo.reducer'
 
-function TodoList({ title, cards, listId, index }) {
+function TodoList({ title, cards = [], listId, index }) {
+  // Default to empty array for safety
   const dispatch = useDispatch()
   const [isEditing, setIsEditing] = useState(false)
   const [listTitle, setListTitle] = useState(title)
@@ -20,12 +21,36 @@ function TodoList({ title, cards, listId, index }) {
   }
 
   const handleEditTitleList = () => {
-    dispatch(changeTitleList(listId, listTitle))
+    // Formatage de listId si nécessaire
+    const listIdFormatted = Number(listId.match(/\d+/)[0])
+    console.log('listIdFormatted', listIdFormatted)
+
+    // Dispatch de l'action avec les paramètres corrects
+    dispatch(changeTitleList(listIdFormatted, listTitle))
+      .then(() => {
+        // Rafraîchir la page après la mise à jour
+        window.location.reload()
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la mise à jour du titre :', error)
+      })
+
     setIsEditing(false)
   }
 
   const handleRemove = () => {
-    dispatch(removeList(listId))
+    const listIdFormatted = Number(listId.match(/\d+/)[0])
+    console.log('listIdFormatted', listIdFormatted)
+
+    // Dispatch de l'action pour supprimer la liste
+    dispatch(removeList({ listIdFormatted }))
+      .then(() => {
+        // Rafraîchir la page après la suppression
+        window.location.reload()
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la suppression de la liste :', error)
+      })
   }
 
   return (
@@ -73,18 +98,22 @@ function TodoList({ title, cards, listId, index }) {
                   ref={providedDrop.innerRef}
                   className="todoList__content"
                 >
-                  {cards.map((card, idx) => {
-                    return (
-                      <TodoCard
-                        key={card.id}
-                        cardId={card.id}
-                        title={card.title}
-                        index={idx}
-                        listId={listId}
-                        member={card.member}
-                      />
-                    )
-                  })}
+                  {cards.length > 0 ? (
+                    cards
+                      .filter((card) => card?.id && card?.title) // Ensuring card has id and title
+                      .map((card, idx) => (
+                        <TodoCard
+                          key={card.id}
+                          cardId={card.id}
+                          title={card.title}
+                          index={idx}
+                          listId={listId}
+                          member={card.member}
+                        />
+                      ))
+                  ) : (
+                    <p>No cards available</p> // Optional: Message if no cards
+                  )}
                   {providedDrop.placeholder}
                 </div>
                 <TodoCreate listId={listId} className="button_list" />

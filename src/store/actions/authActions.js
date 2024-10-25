@@ -108,3 +108,32 @@ export const deleteUser = (id) => {
     }
   }
 }
+export const updateUser = (userData) => {
+  return async (dispatch) => {
+    try {
+      const token = localStorage.getItem('token')
+      const response = await fetch(
+        `https://localhost:7039/api/users/updateUser/${userData.id}`,
+        {
+          method: 'PATCH', // Utilisez PATCH pour mettre à jour les informations partiellement
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(userData), // Convertir les données utilisateur en JSON
+        }
+      )
+
+      if (response.ok) {
+        // Dispatch une action pour indiquer que la mise à jour a réussi
+        dispatch({ type: 'UPDATE_USER_SUCCESS', payload: userData })
+        console.log(`User with ID ${userData.id} updated successfully`)
+      } else {
+        throw new Error('Failed to update user')
+      }
+    } catch (error) {
+      console.error('Error updating user:', error)
+      throw error // Lancer l'erreur pour que l'appelant puisse la gérer
+    }
+  }
+}

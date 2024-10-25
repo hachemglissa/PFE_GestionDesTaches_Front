@@ -140,3 +140,25 @@ export const projetEdit = (id, data) => {
     }
   }
 }
+// Exemple d'action pour supprimer un projet
+export const deleteProject = (projectId) => {
+  return async (dispatch) => {
+    const token = localStorage.getItem('token')
+    const response = await fetch(
+      `https://localhost:7039/api/projets/${projectId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+
+    if (response.ok) {
+      dispatch({ type: 'DELETE_PROJECT_SUCCESS', payload: projectId })
+      console.log(`Project with ID ${projectId} deleted successfully`)
+    } else {
+      throw new Error('Failed to delete project')
+    }
+  }
+}

@@ -83,8 +83,8 @@ const Registration = (props) => {
         >
           <option>Select a role</option>
           <option value="Admin">Admin</option>
-          <option value="user">Developper</option>
-          <option value="user">TeamLeader</option>
+          <option value="Developer">Developer</option>
+          <option value="TeamLeader">TeamLeader</option>
         </select>
       </div>
       <br />

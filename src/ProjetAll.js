@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import './styles/projet.css'
 import { useDispatch } from 'react-redux'
 import { getAllUsers } from './store/actions/authActions'
-import { projetAll } from './store/actions/projetActions'
+import { projetAll, deleteProject } from './store/actions/projetActions' // Importez la fonction de suppression
+import { FaTrash } from 'react-icons/fa' // Importez l'icône de corbeille
 
 const ProjetAll = () => {
   const dispatch = useDispatch()
@@ -35,9 +36,26 @@ const ProjetAll = () => {
     navigate('/projet/add')
     setRefreshKey((prevKey) => prevKey + 1) // Increment key to trigger data refresh
   }
+
   const handleAllUsers = () => {
     dispatch(getAllUsers()) // Fetch all users
     navigate('/users/all') // Navigate to the UsersList page
+  }
+
+  const handleDeleteProject = async (projectId) => {
+    const confirmDelete = window.confirm(
+      'Voulez-vous vraiment supprimer ce projet?'
+    )
+
+    if (confirmDelete) {
+      try {
+        await dispatch(deleteProject(projectId)) // Appeler votre action de suppression
+        await dispatch(projetAll()) // Rafraîchir les projets après la suppression
+        setRefreshKey((prevKey) => prevKey + 1) // Incrémentez pour assurer le rafraîchissement si nécessaire
+      } catch (error) {
+        console.error('Failed to delete project:', error)
+      }
+    }
   }
 
   return (
@@ -65,6 +83,13 @@ const ProjetAll = () => {
               onClick={() => onProjectClick(project.id)}
             >
               <div className="projectName">{project.name}</div>
+              <FaTrash
+                className="deleteIcon"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleDeleteProject(project.id)
+                }}
+              />
             </div>
           ))
         ) : (

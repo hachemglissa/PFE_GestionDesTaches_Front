@@ -117,9 +117,10 @@ export const editCard = (id, data) => {
   return async (dispatch) => {
     const token = localStorage.getItem('token')
     dispatch({ type: 'TACHES_LOAD_REQUEST' })
+
     try {
       const response = await fetch(`https://localhost:7039/api/taches/${id}`, {
-        method: 'PUT', // Ensure this is the correct method for your endpoint
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
@@ -128,17 +129,17 @@ export const editCard = (id, data) => {
       })
 
       if (response.ok) {
-        // Parse the response JSON if the response is successful
-        const data = await response.json()
-        // Dispatch an action with the fetched data
-        dispatch({ type: 'TACHES_LOAD_SUCCESS', payload: data })
+        const responseData = await response.json()
+        dispatch({ type: 'TACHES_LOAD_SUCCESS', payload: responseData })
 
-        // Store data in localStorage
-        localStorage.setItem('list', JSON.stringify(data))
-        localStorage.setItem('title', data.title || '') // Ensure `data.name` is a string
+        // Store necessary data in localStorage
+        localStorage.setItem('list', JSON.stringify(responseData))
+        if (responseData.title) {
+          localStorage.setItem('title', responseData.title)
+        }
       } else {
-        // Handle unsuccessful responses
-        throw new Error('Failed to fetch tache data')
+        const errorText = await response.text()
+        throw new Error(`Failed to fetch tache data: ${errorText}`)
       }
     } catch (error) {
       console.error('Error fetching tache data:', error)
@@ -146,6 +147,7 @@ export const editCard = (id, data) => {
     }
   }
 }
+
 export const removeCard = (id) => {
   return async (dispatch) => {
     const token = localStorage.getItem('token')

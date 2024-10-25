@@ -81,7 +81,8 @@ const TodoCreate = ({ isLists, listId, className }) => {
 
   const handleAddCard = () => {
     if (title === '') return
-    const statusId = listId.match(/\d+/g)
+    // console.log('statusId',listId)
+    //const statusId = listId.match(/\d+/g)
 
     const newCards = {
       //id: `card-${uuidv4()}`, // Generate a unique ID for the card
@@ -90,7 +91,7 @@ const TodoCreate = ({ isLists, listId, className }) => {
       priority: 'low', // Include priority
       startDate: new Date(), // Include start date
       dueDate: new Date(), // Include due date
-      statusId: Number(statusId), // List ID
+      statusId: listId, // List ID
       projectId: Number(projectId), // Include status ID
     }
     console.log('newCard==>', newCards)

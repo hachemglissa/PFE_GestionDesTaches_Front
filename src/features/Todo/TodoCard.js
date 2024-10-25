@@ -7,7 +7,7 @@ import { FaUser } from 'react-icons/fa'
 import TodoFormModal from './TodoFormModal'
 import TodoForm from './TodoForm'
 import ButtonIcon from 'components/ButtonIcon'
-import Modal from './modal' // Import the Modal component
+import Modal from './modal'
 
 // redux
 import {
@@ -28,23 +28,23 @@ const TodoCard = ({ cardId, title, listId, index }) => {
   const [priority, setPriority] = useState('')
   const [startDate, setStartDate] = useState('')
   const [dueDate, setDueDate] = useState('')
-  const [users, setUsers] = useState([]) // State for users
+  const [users, setUsers] = useState([])
   const [selectedUserId, setSelectedUserId] = useState('')
 
-  const [isModalOpen, setModalOpen] = useState(false) // State for modal visibility
+  const [isModalOpen, setModalOpen] = useState(false)
   const getPriorityStyle = (priority) => {
     switch (priority) {
       case 'High':
-        return { color: 'red', label: 'H' } // Rouge pour High
+        return { color: 'red', label: 'H' }
       case 'Medium':
-        return { color: 'yellow', label: 'M' } // Jaune pour Medium
+        return { color: 'yellow', label: 'M' }
       case 'Low':
-        return { color: 'green', label: 'L' } // Vert pour Low
+        return { color: 'green', label: 'L' }
       default:
-        return { color: 'black', label: '' } // Couleur par défaut
+        return { color: 'black', label: '' }
     }
   }
-  const priorityStyle = getPriorityStyle(priority) // Obtenez le style basé sur la priorité
+  const priorityStyle = getPriorityStyle(priority)
 
   const handleCloseForm = () => {
     setIsEditing(false)
@@ -75,8 +75,8 @@ const TodoCard = ({ cardId, title, listId, index }) => {
       }
     }
 
-    fetchCardDetails() // Appelez la fonction pour récupérer les détails de la carte
-  }, [dispatch, CId]) // Se déclenche lorsque CId change
+    fetchCardDetails()
+  }, [dispatch, CId])
 
   const handleEditCard = () => {
     const data = {
@@ -89,7 +89,9 @@ const TodoCard = ({ cardId, title, listId, index }) => {
       statusId: Number(statusId),
       userId: selectedUserId,
     }
-    dispatch(editCard(cardId, data))
+    dispatch(editCard(cardId, data)).then(() => {
+      window.location.reload()
+    })
     dispatch(getCardById(CId))
     handleCloseForm()
   }

@@ -7,7 +7,7 @@ import TodoList from './TodoList'
 import TodoCreate from './TodoCreate'
 
 // redux
-import { onDragEndList, onDragEndCard } from 'redux/todo.reducer'
+import { /*onDragEndList,*/ onDragEndCard } from 'redux/todo.reducer'
 import { fetchLists } from 'redux/todo.reducer'
 
 // selectors
@@ -30,10 +30,10 @@ function Todo() {
   const onDragEnd = (result) => {
     const { type } = result
 
-    if (type === 'LIST') {
+    /* if (type === 'LIST') {
       dispatch(onDragEndList(result))
       return false
-    }
+    }*/
 
     if (type === 'CARD') {
       dispatch(onDragEndCard(result))

@@ -146,3 +146,21 @@
   box-shadow: 0 8px 20px rgba(23, 162, 184, 0.6); /* Ombre plus forte au survol */
   transform: translateY(-3px); /* Légère élévation au survol */
 }
+.deleteIcon {
+  color: red; /* Changez ceci pour la couleur que vous voulez */
+  cursor: pointer; /* Change le curseur pour indiquer que c'est cliquable */
+  transition: color 0.3s ease; /* Pour une transition douce */
+}
+
+.projectCard .deleteIcon:hover {
+  color: rgb(
+    84,
+    6,
+    6
+  ); /* Changez la couleur au survol pour indiquer l'interaction */
+}
+.projectCard .deleteIcon {
+  color: red; /* Changez ceci pour la couleur que vous voulez */
+  cursor: pointer; /* Change le curseur pour indiquer que c'est cliquable */
+  transition: color 0.3s ease; /* Pour une transition douce */
+}

@@ -88,18 +88,29 @@ export const changeTitleList = (listId, title) => async (dispatch) => {
   dispatch({ type: CHANGE_TITLE_LIST_REQUEST })
   const token = localStorage.getItem('token')
 
-  const nombres = listId.match(/\d+/g)
+  // Assurez-vous que listId est une chaîne
   const projectId = localStorage.getItem('idProjet')
+  const bodyData = { projectId, title }
+  console.log('Corps de la requête :', JSON.stringify(bodyData)) // Vérifiez le corps
 
   try {
-    await fetch(`https://localhost:7039/api/status/${nombres}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + token,
-      },
-      body: JSON.stringify({ title, projectId }),
-    })
+    const response = await fetch(
+      `https://localhost:7039/api/status/${listId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + token,
+        },
+        body: JSON.stringify(bodyData),
+      }
+    )
+
+    // Vérifiez la réponse pour voir si elle est OK
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP : ${response.status}`)
+    }
+
     dispatch({ type: CHANGE_TITLE_LIST_SUCCESS, payload: { listId, title } })
   } catch (error) {
     dispatch({ type: CHANGE_TITLE_LIST_FAILURE, payload: error.message })
@@ -110,18 +121,17 @@ export const removeList = (listId) => async (dispatch) => {
   dispatch({ type: REMOVE_LIST_REQUEST })
   const token = localStorage.getItem('token')
   const projectId = localStorage.getItem('idProjet')
-
-  const Id = Number(listId.match(/\d+/g))
-  console.log('nbrrrr', Id)
+  const id = listId.listIdFormatted
+  console.log('listId', listId.listIdFormatted)
   try {
-    await fetch(`https://localhost:7039/api/status/${Id}`, {
+    await fetch(`https://localhost:7039/api/status/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token,
       },
     })
-    dispatch({ type: REMOVE_LIST_SUCCESS, payload: Id })
+    dispatch({ type: REMOVE_LIST_SUCCESS, payload: id })
     dispatch(fetchLists(projectId)) // Récupérer la liste à jour
   } catch (error) {
     dispatch({ type: REMOVE_LIST_FAILURE, payload: error.message })
@@ -190,9 +200,8 @@ export const editCard = (cardId, updatedCardDetails) => async (dispatch) => {
   const Id = Number(cardId.match(/\d+/g))
 
   try {
-    // Make the PUT request to update the card details
     const response = await fetch(`https://localhost:7039/api/taches/${Id}`, {
-      method: 'PUT',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: 'Bearer ' + token,
@@ -241,7 +250,7 @@ export const getCardById = (cardId) => async (dispatch) => {
   }
 }
 
-export const onDragEndList = (payload) => ({ type: DRAG_END_LIST, payload })
+//export const onDragEndList = (payload) => ({ type: DRAG_END_LIST, payload })
 
 export const onDragEndCard = (payload) => async (dispatch) => {
   const { destination, source, draggableId } = payload
@@ -282,7 +291,7 @@ export const onDragEndCard = (payload) => async (dispatch) => {
 
       // API call to update the card's statusId with existing values
       const response = await fetch(`https://localhost:7039/api/taches/${Id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + token,
